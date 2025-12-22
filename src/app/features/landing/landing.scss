@@ -1,0 +1,109 @@
+/* src/app/modules/landing/landing.component.scss */
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white; /* O texto será branco por causa do fundo escuro da imagem */
+  background-color: #05720b31;
+  .logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+}
+
+/* Botões específicos da Landing */
+.btn-cta {
+  padding: 10px 25px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+
+  /* Modificador para o botão maior da Hero */
+  &.btn-large {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Hero Section */
+.hero-section {
+  /* Fundo com efeito Parallax (Fixo) */
+  background-image: url("https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1470&auto=format&fit=crop");
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--light-text);
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-overlay);
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+      opacity: 0.9;
+
+      @media (max-width: 768px) {
+        font-size: 1rem;
+      }
+    }
+
+    .hero-disclaimer {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  }
+}
+
+/* Features Section */
+.features-section {
+  padding: 100px 20px;
+  background-color: #f5f5f5;
+  text-align: center;
+  min-height: 100vh; /* Garante scroll suficiente */
+}

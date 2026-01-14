@@ -1,0 +1,194 @@
+/* Container geral */
+.register-container {
+  min-height: calc(
+    100vh - 56px - env(safe-area-inset-top)
+  ); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--bg-app);
+}
+
+/* Card */
+.register-card {
+  border: 0.01rem solid var(--border-color);
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-surface);
+  border-radius: 15px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 30px var(--box-shadow);
+}
+
+/* Header */
+.register-header {
+  text-align: center;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Grupo de campo */
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+  }
+
+  input {
+    height: 44px;
+    padding: 0 12px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--focus-input);
+      box-shadow: 0 0 0 1.5px var(--box-shadow);
+    }
+  }
+
+  .error {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    color: var(--danger);
+  }
+}
+
+/* Botão */ 
+button{
+  margin-top: 0.3rem;
+  height: 46px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: var(--btn-color);
+  color: var(--text-btn);
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    filter: brightness(1.02);
+  }
+}
+/* Termos de uso */
+.terms-group {
+  margin: 0.3rem 0 0.3rem;
+}
+
+.terms-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    margin-top: 5px;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+  }
+
+  span {
+    line-height: 1.4;
+  }
+
+  a {
+    color: var(--accent-color);
+    font-weight: 500;
+    text-decoration: underline;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.terms-error {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+/* Link login */
+.login-link {
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--text-muted);
+
+  a {
+    color: var(--accent-color);
+    font-weight: 600;
+    text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+  }
+
+}
+
+/* =========================
+   BREAKPOINTS
+========================= */
+
+/* Telas muito pequenas (ex: celulares antigos) */
+@media (max-width: 360px) {
+  .register-card {
+    padding: 20px 16px;
+  }
+
+  .register-header h1 {
+    font-size: 1.4rem;
+  }
+
+  input {
+    height: 40px;
+  }
+}
+
+/* Tablets e telas maiores */
+@media (min-width: 768px) {
+  .register-container {
+    padding: 40px;
+  }
+
+  .register-card {
+    padding: 32px;
+  }
+}

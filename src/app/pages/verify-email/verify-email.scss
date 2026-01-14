@@ -1,0 +1,112 @@
+.verify-container {
+  min-height: calc(
+    100vh - 56px - env(safe-area-inset-top)
+  ); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-app);
+  padding: 16px;
+}
+
+.verify-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-surface);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+  text-align: center;
+  border: 0.01rem solid var(--border-color);
+  box-shadow: 0 10px 30px var(--box-shadow);
+}
+
+.verify-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: .5rem;
+    color: var(--text-primary);
+  }
+
+  p {
+    font-size: .95rem;
+    color: var(--text-secondary);
+  }
+}
+
+.code-inputs {
+  display: flex;
+  justify-content: center;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+
+  input {
+    width: 48px;
+    height: 56px;
+    font-size: 1.4rem;
+    text-align: center;
+    border-radius: .5rem;
+    border: 1px solid var(--border-soft);
+    background: var(--bg-muted);
+    color: var(--text-primary);
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+      background: var(--bg-surface);
+    }
+  }
+}
+
+.error {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: .85rem;
+  color: var(--danger);
+}
+
+button.full {
+  border: none;
+  width: 100%;
+  padding: .9rem;
+  font-size: 1rem;
+  border-radius: 999px;
+  background-color: var(--btn-color);
+  color: var(--text-btn);
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    filter: brightness(1.02);
+  }
+}
+
+.verify-footer {
+  margin-top: 1.5rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+
+  .link {
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: .3rem;
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+}

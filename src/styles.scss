@@ -1,40 +1,139 @@
-/* You can add global styles to this file, and also import other style files */
+/* ===============================
+   RESET + BASE
+================================ */
 
-
-html, body { height: 100%; }
-
-/* Reset básico e Fontes */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html, body {
   height: 100%;
   width: 100%;
+  overscroll-behavior: none;
 }
 
-body { margin: 0; 
-    font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+}
 
-/* Variáveis de Cor Globais */
+/* ===============================
+   VARIÁVEIS LIGHT (default)
+================================ */
+
 :root {
-  --primary-color: #2E7D32; /* Verde Sálvia Forte */
-  --secondary-color: #1A237E; /* Azul Marinho */
-  --light-text: #ffffff;
-  --dark-overlay: rgba(0, 0, 0, 0.65);
+  /* Backgrounds #003049#FCCA46
+ */
+  --bg-app: #FFF8E7;
+  --bg-surface: #FFFFFF;
+  --bg-muted: #eef2f6;
+  
+  /* Textos */
+  --text-primary: #222222;
+  --text-secondary: #555555;
+  --text-muted: #6B7280;
+  --light-text: #ffffffee;
+
+  /* Brand */
+  --primary-color: #2A7DE1;
+  --secondary-color: #00A86B;
+  --accent-color: #19ab1b;
+  
+  --primary-hover: #115e59;
+  --primary-soft: #ccfbf1;
+
+  --header: #002f4983;
+  --footer:   #acbed3;
+
+  --btn-color: #e6a100;
+  --btn-login: #de7404;
+  --btn-main: #ce6d05ea;
+  --text-btn: #ffffff;
+
+  /* Estados */
+  --danger: #dc2626;
+  --warning: #facc15;
+  --success: #2A9D8F;
+  --info: #0284c7;
+  
+  /* Bordas & UI */
+  --box-shadow:  rgba(0, 0, 0, 0.08);
+  --focus-input: #17793b;
+  --border-color: #d1d5db;
+  --border-soft: #e2e8f0;
+  --focus-ring: rgba(15, 118, 110, 0.35);
+
+  /* Overlay */
+  --dark-overlay: rgba(4, 12, 17, 0.65);
 }
 
-/* Classes utilitárias globais */
+/* ===============================
+   VARIÁVEIS DARK
+================================ */
+
+html[data-bs-theme='dark'] {
+  /* Backgrounds */
+  --bg-app: #0D1117;          /* fundo principal */
+  --bg-surface: #161B22;      /* cards, modais */
+  --bg-muted: #1F2937;        /* seções, listas */
+
+  /* Textos */
+  --text-primary: #F9FAFB;    /* texto principal */
+  --text-secondary: #D1D5DB;  /* textos secundários */
+  --text-muted: #9CA3AF;      /* placeholders, hints */
+  --light-text: #ffffffee;
+
+  /* Brand */
+  --primary-color: #3A7BD5;
+  --secondary-color: #00C48C;
+  --accent-color: #4ADE80;
+
+  --primary-hover: #2563EB;
+  --primary-soft: #1E3A8A;
+
+  --header: #0a192f94;
+  --footer: #1E293B;
+  
+  /* Botões */
+  --btn-color: #F59E0B;       /* Amarelo forte */
+  --btn-login: #F97316;       /* Laranja vibrante */
+  --btn-main: #EA580C;        /* Laranja mais intenso */
+  --text-btn: #ffffff;        /* Texto branco nos botões */
+
+
+  /* Estados */
+  --danger: #F87171;
+  --warning: #FACC15;
+  --success: #34D399;
+  --info: #38BDF8;
+
+  /* Bordas & UI */
+  --box-shadow: rgba(255, 255, 255, 0.036); /* Sombras leves claras */
+  --focus-input: #10B981;     /* Verde foco */
+  --border-color: #374151;    /* Bordas discretas */
+  --border-soft: #4B5563;     /* Bordas suaves */
+  --focus-ring: rgba(59, 130, 246, 0.45); /* Azul foco */
+
+  /* Overlay */
+  --dark-overlay: rgba(0, 0, 0, 0.65); /* Overlay escuro */
+}
+
+
+/* ===============================
+   BOTÕES GLOBAIS
+================================ 
+
 .btn-primary {
   background-color: var(--primary-color);
-  color: white;
-  transition: transform 0.2s, background-color 0.2s;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.2s ease;
 
   &:hover {
     transform: scale(1.05);
-    background-color: #256629;
+    filter: brightness(1.1);
   }
 }
+*/

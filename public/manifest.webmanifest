@@ -1,0 +1,17 @@
+{
+  "name": "Organizador Geral",
+  "short_name": "Gara",
+  "display": "standalone",
+  "background-color": "#f5f6f8",
+  "theme_color": "#cfe5d3",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "icons/icon_Gara.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+/* Container principal: ocupa a tela toda e centraliza o card */
+.recovery-container {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  min-height: 100hv;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: var(--bg-app);
+}
+
+/* Estilo do Card */
+.card {
+  background: var(--bg-surface);
+  width: 100%;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  border: 0.01rem solid var(--border-soft);
+  box-shadow: 0 10px 30px var(--box-shadow);
+  max-width: 420px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.recovery-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    margin-top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+}
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--focus-input);
+    box-shadow: 0 0 0 1.5px var(--box-shadow);
+  }
+}
+
+/* Botões */
+button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 14px;
+  background-color: var(--btn-color);
+  color: var(--text-btn);
+  border: none;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    filter: brightness(1.01);
+  }
+}
+
+
+/* Mensagens de Erro */
+.error {
+  margin-top: 15px;
+  color: var(--danger);
+  background: #fff5f5;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid #fab1a0;
+}
+
+/* Banner de Debug (Modo Dev) */
+.dev-banner {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.dev-banner code {
+  display: block;
+  background: #f8f9fa;
+  padding: 5px;
+  margin-top: 5px;
+  word-break: break-all;
+}
+
+
+/* MOBILE AJUSTES */
+@media (max-width: 480px) {
+  .card {
+    padding: 2rem 1.5rem;
+  }
+}

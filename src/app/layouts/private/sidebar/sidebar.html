@@ -1,1 +1,43 @@
-<p>sidebar works!</p>
+<aside class="sidebar" [class.sidebar--open]="menuService.sidebarOpen()"
+  [class.sidebar--closed]="!menuService.sidebarOpen()" [class.sidebar--mobile]="menuService.isMobile()">
+
+  <div class="sidebar__content">
+    <nav class="sidebar__nav">
+      <mat-nav-list>
+        @for (item of menuService.menuItems; track item.label) {
+        <div class="menu-item-wrapper">
+          <mat-list-item class="menu-item" [class.menu-item--active]="item.route && router.url.includes(item.route)"
+            (click)="onMenuItemClick(item)">
+
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+
+            @if (menuService.sidebarOpen() || menuService.isMobile()) {
+            <div matListItemTitle>
+              <span>{{ item.label }}</span>
+            </div>
+            }
+
+            @if ((menuService.sidebarOpen() || menuService.isMobile()) && item.children) {
+            <mat-icon iconSuffix class="expand-icon" [class.expanded]="item.expanded">
+              expand_more
+            </mat-icon>
+            }
+          </mat-list-item>
+
+          <div class="submenu"
+            [class.submenu--expanded]="item.expanded && (menuService.sidebarOpen() || menuService.isMobile())">
+            <mat-nav-list>
+              @for (child of item.children; track child.label) {
+              <mat-list-item class="submenu-item" [routerLink]="child.route" routerLinkActive="submenu-item--active">
+                <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+                <span matListItemTitle>{{ child.label }}</span>
+              </mat-list-item>
+              }
+            </mat-nav-list>
+          </div>
+        </div>
+        }
+      </mat-nav-list>
+    </nav>
+  </div>
+</aside>

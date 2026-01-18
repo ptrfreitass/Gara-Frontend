@@ -1,0 +1,68 @@
+
+/* Header base */
+.pub-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background-color: var(--header);
+  backdrop-filter: blur(3px);
+  
+  /* Safe area para PWA fullscreen */
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Conteúdo */
+.pub-header__content {
+  height: 56px; // ALTURA IDEAL MOBILE
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+/* Logo */
+.pub-header__logo img {
+  height: 32px;
+  width: auto;
+}
+
+/* Botão */
+.btn-logout {
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 0cap;
+  background-color: var(--btn-login);
+  color: var(--text-btn);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.03);
+    filter: brightness(1.03);
+  }
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 768px) {
+  .pub-header__content {
+    height: 72px;
+    padding: 0 32px;
+  }
+
+  .pub-header__logo img {
+    height: 40px;
+  }
+
+  .pub-header_btn {
+    height: 42px;
+    font-size: 0.9rem;
+  }
+}

@@ -1,0 +1,43 @@
+<div class="verify-container">
+  <div class="verify-card">
+    <header class="verify-header">
+      <h1>Verifique seu e-mail</h1>
+      <p>
+        Enviamos um código de 6 dígitos para<br />
+        <strong>{{ email }}</strong>
+      </p>
+    </header>
+
+    <form [formGroup]="verificationForm" (ngSubmit)="submit()" novalidate>
+      <!-- Código -->
+      <div class="code-inputs">
+        <input *ngFor="let ctrl of codeControls; let i = index" type="text" inputmode="numeric" maxlength="1"
+          autocomplete="one-time-code" [formControlName]="ctrl" (input)="onInput($event, i)"
+          (keydown)="onKeyDown($event, i)" />
+      </div>
+
+      @if (verificationForm.invalid && verificationForm.touched) {
+      <span class="error">Código inválido ou incompleto</span>
+      }
+
+      <!-- Enviar -->
+      <button class="btn-primary full" type="submit" [disabled]="isLoading || verificationForm.invalid">
+        @if (!isLoading) {
+        <span>Confirmar código</span>
+        } @else {
+        <span>Verificando...</span>
+        }
+      </button>
+    </form>
+
+    <!-- Reenvio -->
+    <footer class="verify-footer">
+      <span>Não recebeu o código?</span>
+      <button type="button" class="link" (click)="resendVerificationCode()" [disabled]="resendCooldown">
+        Reenviar @if (resendCooldown) {
+        <small>({{ resendSeconds }}s)</small>
+        }
+      </button>
+    </footer>
+  </div>
+</div>

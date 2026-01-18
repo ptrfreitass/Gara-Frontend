@@ -1,0 +1,47 @@
+<div class="login-container">
+  <div class="login-card">
+    <header class="login-header">
+      <h1>Login</h1>
+    </header>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+
+      <!-- NOME -->
+      <div class="form-group">
+        <label>Login</label>
+        <input 
+          type="text" 
+          formControlName="login" 
+          placeholder="Digite seu usuário ou e-mail" 
+        />
+      </div>
+
+      <!-- RECUPERAR ACESSO -->
+      <p class="recovery-link">
+        <a routerLink="/recovery">esqueceu a senha?</a>
+      </p>
+
+      <!-- SENHA -->
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" formControlName="password" placeholder="Mínimo 8 caracteres" />
+      </div>
+
+      <!-- ENVIAR -->
+      <button 
+        class="btn-primary" 
+        type="submit" 
+        [disabled]="isLoading"
+      >
+      {{ isLoading ? 'Entrando...' : 'Entrar' }}  
+      </button>
+
+      <!-- LINK LOGIN -->
+      <p class="register-link">
+        Ainda não tem conta?
+        <a routerLink="/register">Registre-se</a>
+      </p>
+
+    </form>
+  </div>
+</div>

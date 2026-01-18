@@ -1,0 +1,47 @@
+<div class="recovery-container">
+  @if (!isLinkValid) {
+  <div class="card">
+    <header class="recovery-header">
+      <h1>Recuperar Senha</h1>
+      <p>Digite seu e-mail para receber o link de recuperação.</p>
+    </header>
+    <input 
+    type="email" 
+    [(ngModel)]="emailRequest" 
+    placeholder="seu@email.com"
+    required
+    >
+
+    <button (click)="sendLink()" [disabled]="isLoading">
+      {{ isLoading ? 'Enviando...' : 'Enviar Link' }}
+    </button>
+  </div>
+  } @else {
+  <div class="card">
+    <header class="recovery-header">
+      <h2>Nova Senha</h2>
+      <p>Olá <strong>{{ emailFromUrl }}</strong>, defina sua nova senha abaixo.</p>
+    </header>
+    <input type="password" [(ngModel)]="password" placeholder="Nova Senha">
+    <input type="password" [(ngModel)]="passwordConfirmation" placeholder="Confirme a Senha">
+
+    <button (click)="confirmReset()" [disabled]="isLoading">
+      {{ isLoading ? 'Salvar Nova Senha' : 'Confirmar Alteração' }}
+    </button>
+  </div>
+  }
+
+  @if (errorMessage) {
+  <p class="error">{{ errorMessage }}</p>
+  }
+</div>
+
+<!--
+@if (devLink) {
+  <div class="dev-banner">
+    <strong>🛠️ MODO DEV: Link Gerado</strong>
+    <code>{{ devLink }}</code>
+    <p><small>Clique no link acima para simular a chegada do e-mail.</small></p>
+  </div>
+}
+-->

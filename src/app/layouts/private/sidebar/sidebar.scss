@@ -1,0 +1,155 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background: linear-gradient(180deg, #546a8c 0%, #bac4d8 100%);
+  color: #ffffff;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  
+  // Transição nativa para largura e transformações
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 250px;
+
+  // Estado FECHADO (Desktop) - Estilo Mini Sidebar
+  &--closed:not(.sidebar--mobile) {
+    width: 80px;
+
+    .menu-item span, .expand-icon, .submenu {
+      display: none; // Oculta textos e submenus no modo mini
+    }
+  }
+
+.sidebar--closed {
+  span, .expand-icon {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 100ms ease;
+  }
+}
+
+  // Comportamento MOBILE
+  &--mobile {
+    width: 280px;
+    transform: translateX(-100%); // Escondido por padrão
+
+    &.sidebar--open {
+      transform: translateX(0); // Desliza para dentro
+    }
+  }
+
+  // Scrollbar Customizada
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    &:hover { background: rgba(255, 255, 255, 0.3); }
+  }
+
+  &__content { padding: 1rem 0; }
+  &__nav { padding: 0; }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  // Animação nativa de Fade In
+  animation: fadeIn 300ms ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.menu-item {
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 0.25rem 0.75rem;
+  transition: all 200ms ease-in-out;
+  color: rgba(255, 255, 255, 0.8);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  &--active {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    font-weight: 500;
+    mat-icon { color: #60a5fa; }
+  }
+
+  mat-icon {
+    color: rgba(37, 35, 35, 0.7);
+    margin-right: 12px;
+    min-width: 24px;
+  }
+
+  .expand-icon {
+    margin-left: auto;
+    transition: transform 300ms ease;
+    &.expanded { transform: rotate(180deg); }
+  }
+}
+
+// SUBMENU COM TRANSIÇÃO NATIVA (Efeito Accordion)
+.submenu {
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0 0.75rem;
+  
+  // A mágica da transição sem o motor de animação do Angular
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 300ms ease-in-out, 
+              opacity 200ms ease-in-out,
+              margin 300ms ease;
+
+  &--expanded {
+    max-height: 500px; // Valor suficiente para o conteúdo
+    opacity: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  mat-nav-list { padding: 0.5rem 0; }
+}
+
+.submenu-item {
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 0.25rem 0.5rem;
+  padding-left: 1rem;
+  transition: all 200ms ease;
+  color: rgba(255, 255, 255, 0.7);
+  height: 40px;
+  display: flex;
+  align-items: center;
+
+  &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+  &--active { color: #93c5fd; font-weight: 500; }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+}

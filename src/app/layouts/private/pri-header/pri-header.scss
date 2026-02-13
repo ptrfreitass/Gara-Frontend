@@ -1,68 +1,85 @@
-
-/* Header base */
-.pub-header {
+.pri-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-
   background-color: var(--header);
   backdrop-filter: blur(3px);
-  
-  /* Safe area para PWA fullscreen */
   padding-top: env(safe-area-inset-top);
+  box-shadow: 0 2px 8px var(--box-shadow);
 }
 
-/* Conteúdo */
-.pub-header__content {
-  height: 56px; // ALTURA IDEAL MOBILE
+.pri-header__content {
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
+  gap: 1rem;
 }
 
-/* Logo */
-.pub-header__logo img {
-  height: 32px;
-  width: auto;
+.pri-header__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+
+  img {
+    height: 32px;
+    width: auto;
+  }
 }
 
-/* Botão */
+.header__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-left: 0.5rem;
+}
+
+.header__username {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: none;
+}
+
 .btn-logout {
   height: 36px;
   padding: 0 0.75rem;
   border-radius: 999px;
   font-size: 0.95rem;
   font-weight: 600;
-  border: 0cap;
+  border: none;
   background-color: var(--btn-login);
   color: var(--text-btn);
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.2s ease;
-  
+
   &:hover {
     transform: scale(1.03);
-    filter: brightness(1.03);
+    filter: brightness(1.1);
   }
 }
 
-/* =========================
-   DESKTOP
-========================= */
-
 @media (min-width: 768px) {
-  .pub-header__content {
+  .pri-header__content {
     height: 72px;
     padding: 0 32px;
   }
 
-  .pub-header__logo img {
+  .pri-header__logo img {
     height: 40px;
   }
 
-  .pub-header_btn {
+  .header__title {
+    font-size: 1.5rem;
+  }
+
+  .header__username {
+    display: block;
+  }
+
+  .btn-logout {
     height: 42px;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }

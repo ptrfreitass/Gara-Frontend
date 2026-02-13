@@ -1,7 +1,7 @@
-import { Injectable, Injector, inject, signal } from '@angular/core';
+import { Injectable, Injector, inject, signal, computed} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User, AuthResponse } from '../../models/user/user-model';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, switchMap, of, catchError, map, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 interface AvailabilityResponse {
@@ -15,39 +15,69 @@ interface AvailabilityResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private injector = inject(Injector);
-  private get router() {
-    return this.injector.get(Router);
-  }
-  // Usamos Signals para gerenciar o estado do usuário de forma performática
-  private currentUserSignal = signal<any | null>(null);
-  currentUser = this.currentUserSignal.asReadonly();
+  
+  // Signal para manter o estado do usuário
+  public currentUserSignal = signal<User | null>(null);
+  public currentUser = this.currentUserSignal.asReadonly();
 
-  loadUserProfile() {
-    return this.http.get(`api/user`).subscribe({
-      next: (user) => this.currentUserSignal.set(user),
-      error: () => this.logout()
-    });
+  // Computed para formatar o nome
+  public userFirstName = computed(() => {
+    const user= this.currentUserSignal();
+    if (user && user.name) {
+      const firstName = user.name.split( ' ')[0];
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+    }
+    return 'Usuário';
+  });
+
+  getCsrfToken(): Observable<void> {
+    console.log('Solicitando CSRF Cookie...');
+    return this.http.get<void>('/sanctum/csrf-cookie');
   }
 
-  register(userData: User) {
-    return this.http.post<AuthResponse>(`/api/register`, userData).pipe(
-      tap(res => {
-        this.saveToken(res.access_token);
-        this.currentUserSignal.set(res.user);
+  // Retorna Observable para o Guard usar
+  getUser(): Observable<User | null> {
+    return this.http.get<{ user: User }>('/api/user').pipe(
+      map(response => response.user),
+      tap(user => this.currentUserSignal.set(user)),
+      catchError(() => {
+        this.currentUserSignal.set(null);
+        return of(null);
       })
     );
   }
 
-  login(credentials: any) {
-    return this.http.post<AuthResponse>(`/api/login`, credentials).pipe(
-      tap(res => {
-        this.saveToken(res.access_token);
-        this.currentUserSignal.set(res.user);
-      })
-    )
+  register(userData: User) {
+    return this.getCsrfToken().pipe(
+      switchMap(() =>
+        this.http.post<AuthResponse>(`/api/register`, userData).pipe(
+          tap(res => this.currentUserSignal.set(res.user))
+        )
+      )
+    );
   }
 
-  logout():void {
+  login(credentials: any) {
+    console.log('1. Iniciando processo de login...');
+    return this.getCsrfToken().pipe(
+      tap(() => console.log('2. CSRF Token recebido (ou disparado)')),
+      switchMap(() => {
+        console.log('3. Disparando POST para login...');
+        return this.http.post<AuthResponse>(`/api/login`, credentials).pipe(
+          tap(res => {
+            console.log('4. Login bem sucedido!', res);
+            this.currentUserSignal.set(res.user);
+          })
+        );
+      }),
+      catchError(err => {
+        console.error('ERRO NO FLUXO:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  logout(): void {
     this.http.post(`api/logout`, {}).subscribe({
       next: () => this.finalizeLogout(),
       error: () => this.finalizeLogout()
@@ -55,9 +85,10 @@ export class AuthService {
   }
 
   private finalizeLogout(): void {
-    localStorage.removeItem('access_token');
+    // removido = localStorage.removeItem('access_token');
     localStorage.removeItem('pending_email');
 
+    this.currentUserSignal.set(null);
     const router = this.injector.get(Router);
     router.navigate(['/login']);
   }
@@ -67,11 +98,13 @@ export class AuthService {
   }
 
   verifyEmail(email: string, code: string) {
-    return this.http.post<any>('/api/verify-email', { email, code });
-  }
-
-  private saveToken(token: string) {
-    localStorage.setItem('auth_token', token);
+    return this.getCsrfToken().pipe(
+      switchMap(() =>
+        this.http.post<AuthResponse>('/api/verify-email', { email, code }).pipe(
+          tap(res => this.currentUserSignal.set(res.user))
+        )
+      )
+    );
   }
 
   checkEmailAvailability(email: string): Observable<AvailabilityResponse> {
@@ -87,12 +120,8 @@ export class AuthService {
   }
 
   resetPassword(data: any): Observable<any> {
-    // Passamos os parâmetros de segurança via Query String na própria URL do POST
-    //const url = `api/reset-password?email=${data.email}&expires=${data.expires}&signature=${data.signature}`;
-
     const params = `?email=${encodeURIComponent(data.email)}&expires=${data.expires}&signature=${data.signature}`;
 
-    // O corpo do POST leva apenas a senha
     return this.http.post(`api/reset-password${params}`, {
       password: data.password,
       password_confirmation: data.password_confirmation

@@ -1,11 +1,10 @@
-FROM node:22-alpine
+FROM node:22-alpine AS development
 
 WORKDIR /usr/src/app
 
-# Copiar package.json para instalar dependências na build
 COPY package*.json ./
+RUN npm ci
 
-RUN npm install
+COPY . .
 
-# Em desenvolvimento, o código será montado via volume
-CMD ["npm", "run", "start"]
+RUN npm run build

@@ -4,7 +4,7 @@
       <h1>Login</h1>
     </header>
 
-    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+    <form [formGroup]="loginForm" (ngSubmit)="$event.preventDefault();submitLogin()" novalidate>
 
       <!-- NOME -->
       <div class="form-group">
@@ -30,10 +30,11 @@
       <!-- ENVIAR -->
       <button 
         class="btn-primary" 
-        type="submit" 
-        [disabled]="isLoading"
+        type="button"
+        (click)="submitLogin()" 
+        [disabled]="isLoading()"
       >
-      {{ isLoading ? 'Entrando...' : 'Entrar' }}  
+      {{ isLoading() ? 'Entrando...' : 'Entrar' }}  
       </button>
 
       <!-- LINK LOGIN -->

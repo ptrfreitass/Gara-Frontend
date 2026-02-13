@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -16,16 +16,19 @@ import { AuthService } from '../../../core/services/auth/auth-service';
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class Register {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router)
+  private router = inject(Router);
 
-  isLoading = false;
+  isLoading = signal(false);
+  isCheckingUsername = signal(false);
+  usernameAvailable = signal<boolean | null>(null);
+  isCheckingEmail = signal(false);
+  emailAvailable = signal<boolean | null>(null);
 
-  // 1. Usamos nonNullable para que o TS saiba que os valores serão strings, não null.
   registerForm = this.fb.nonNullable.group(
     {
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
@@ -47,93 +50,74 @@ export class Register {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
-    // 2. getRawValue() agora retorna o objeto exatamente como o Laravel quer
     const payload = this.registerForm.getRawValue();
 
     this.authService.register(payload).subscribe({
       next: (res) => {
         console.log('Usuário registrado com sucesso!', res);
         localStorage.removeItem('access_token');
-        this.isLoading = false;
+        this.isLoading.set(false);
         localStorage.setItem('pending_email', payload.email);
         this.router.navigate(['/verify']);
       },
       error: (err) => {
         console.error('Erro no registro:', err);
-        this.isLoading = false;
-        // DICA: O Laravel envia os erros em err.error.errors
+        this.isLoading.set(false);
       }
     });
   }
-  /* ============================
-        VALIDAÇÃO DE USERNAME
-    ============================ */
-  isCheckingUsername = false;
-  usernameAvailable: boolean | null = null;
 
   onUsernameBlur(): void {
     const control = this.registerForm.get('username');
     const value = control?.value;
 
-    // Só valida se o campo for válido localmente (minlength, etc) e tiver valor
     if (control?.valid && value) {
-      this.isCheckingUsername = true;
-      this.usernameAvailable = null; // Reseta o estado visual
-      control.disable({ emitEvent: false }); // Desabilita sem disparar eventos circulares
+      this.isCheckingUsername.set(true);
+      this.usernameAvailable.set(null);
+      control.disable({ emitEvent: false });
 
       this.authService.checkUsernameAvailability(value).subscribe({
         next: (res) => {
-          this.usernameAvailable = true;
-          this.isCheckingUsername = false;
+          this.usernameAvailable.set(true);
+          this.isCheckingUsername.set(false);
           control.enable();
         },
         error: (err) => {
-          this.usernameAvailable = false;
-          this.isCheckingUsername = false;
+          this.usernameAvailable.set(false);
+          this.isCheckingUsername.set(false);
           control.enable();
-          // Define o erro no formulário para impedir o submit
           control.setErrors({ alreadyInUse: true });
         }
       });
     }
   }
-
-  /* ============================
-      VALIDAÇÃO DE EMAIL
-  ============================ */
-  isCheckingEmail = false;
-  emailAvailable: boolean | null = null;
 
   onEmailBlur(): void {
     const control = this.registerForm.get('email');
     const value = control?.value;
 
     if (control?.valid && value) {
-      this.isCheckingEmail = true;
-      this.emailAvailable = null;
+      this.isCheckingEmail.set(true);
+      this.emailAvailable.set(null);
       control.disable({ emitEvent: false });
 
-      // AGORA chamando a rota de email correta
       this.authService.checkEmailAvailability(value).subscribe({
         next: (res) => {
-          this.emailAvailable = true;
-          this.isCheckingEmail = false;
+          this.emailAvailable.set(true);
+          this.isCheckingEmail.set(false);
           control.enable();
         },
         error: (err) => {
-          this.emailAvailable = false;
-          this.isCheckingEmail = false;
+          this.emailAvailable.set(false);
+          this.isCheckingEmail.set(false);
           control.enable();
-          // Define o erro no formulário
           control.setErrors({ alreadyInUse: true });
         }
       });
     }
   }
-
-  // ===== Helpers =====
 
   fieldInvalid(field: string): boolean {
     const control = this.registerForm.get(field);
@@ -154,5 +138,4 @@ export class Register {
   get terms() {
     return this.registerForm.get('terms');
   }
-
 }

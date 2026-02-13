@@ -40,7 +40,7 @@
           formControlName="username"
           placeholder="ex: Seu_nome26"
           (blur)="onUsernameBlur()"
-          [class.checking]="isCheckingUsername"
+          [class.checking]="isCheckingUsername()"
         />
 
         @if (registerForm.get('username')?.hasError('required') &&
@@ -50,7 +50,7 @@
         <small class="error">Mínimo de 3 caracteres.</small>
         } @else if (registerForm.get('username')?.hasError('alreadyInUse')) {
         <small class="error">Este usuário já está em uso.</small>
-        } @else if (usernameAvailable === true && !isCheckingUsername) {
+        } @else if (usernameAvailable() === true && !isCheckingUsername) {
         <small class="success">Username disponível!</small>
         }
       </div>
@@ -63,14 +63,14 @@
           formControlName="email"
           placeholder="voce@email.com"
           (blur)="onEmailBlur()"
-          [class.checking]="isCheckingEmail"
+          [class.checking]="isCheckingEmail()"
         />
         @if (registerForm.get('email')?.hasError('required') &&
         registerForm.get('email')?.touched) {
         <small class="error">E-mail é obrigatório.</small>
         } @else if (registerForm.get('email')?.hasError('alreadyInUse')) {
         <small class="error">Este usuário já está em uso.</small>
-        } @else if (emailAvailable === true && !isCheckingEmail) {
+        } @else if (emailAvailable() === true && !isCheckingEmail) {
         <small class="success">E-mail disponível!</small>
         }
       </div>
@@ -124,8 +124,8 @@
         }
       </div>
       <!-- ENVIAR -->
-      <button class="btn-primary" type="submit" [disabled]="isLoading">
-        @if (!isLoading) {
+      <button class="btn-primary" type="submit" [disabled]="isLoading()">
+        @if (!isLoading()) {
         <span>Criar conta</span>
         } @else {
         <span>Criando conta...</span>

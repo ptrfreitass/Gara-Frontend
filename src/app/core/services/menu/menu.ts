@@ -18,7 +18,7 @@ export class MenuService {
   isMobile = signal(false);
 
   // Define os itens do menu
-  menuItems: MenuItem[] = [
+  public menuItems = signal<MenuItem[]>([
     
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
 
@@ -57,19 +57,13 @@ export class MenuService {
     {
       label: 'Perfil',
       icon: 'person',
-      route: '/perfil'
+      route: '/profile'
     },
 
     {
       label: 'Configurações',
       icon: 'settings',
-      children: [
-        {
-          label: 'Sair',
-          icon: 'logout',
-          route: '/logout'
-        }
-      ]
+      route: '/settings'
     }
 
     /*
@@ -82,7 +76,15 @@ export class MenuService {
       ]
     },
     */
-  ];
+  ]);
+
+  resetMenuState() {
+    // Agora o .update() vai funcionar
+    this.menuItems.update((items: MenuItem[]) => {
+      items.forEach(item => item.expanded = false);
+      return [...items]; // Retorna um novo array para disparar a atualização
+    });
+  }
 
   constructor() {
     this.checkScreenSize();

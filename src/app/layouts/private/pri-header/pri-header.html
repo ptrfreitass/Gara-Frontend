@@ -1,40 +1,31 @@
-<!--
-<header class="pub-header">
-    <div class="pub-header__content">
-        <a routerLink="/" class="pub-header__logo">
-            <img src="assets/images/icon_Gara.png" alt="Gara" />
-        </a>
+<header class="pri-header">
+  <div class="pri-header__content">
+    <button mat-icon-button (click)="menuService.toggleSidebar()">
+      <mat-icon>{{ menuService.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
 
+    <a routerLink="/home" class="pri-header__logo">
+      <img src="assets/images/icon_Gara.png" alt="Gara" />
+      <span class="header__title">Gara</span>
+    </a>
 
-        <button (click)="onLogout()" class="btn-logout">
-            <span>Sair</span>
-            <i class="icon-exit"></i>
-        </button>
-    </div>
-</header>
--->
-<header class="pub-header">
-    <div class="pub-header__content">
-        <button mat-icon-button (click)="menuService.toggleSidebar()">
-            <mat-icon>{{ menuService.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
-        </button>
-        <a routerLink="/home" class="pub-header__logo">
-            <img src="assets/images/icon_Gara.png" alt="Gara" />
-        </a>
-        <span class="header__title">Gara</span>
-    </div>
+    <div style="flex: 1;"></div>
 
-    <div class="pub-header__content">
-        <span class="header__username">Bem-vindo, Usuário</span>
-        <button mat-icon-button [matMenuTriggerFor]="userMenu">
-            <mat-icon>account_circle</mat-icon>
-        </button>
+    <span class="header__username">Bem-vindo, {{ authService.userFirstName() }} </span>
 
-        <mat-menu #userMenu="matMenu">
-            <button mat-menu-item (click)="onLogout()">
-                <mat-icon>logout</mat-icon>
-                <span>Sair</span>
-            </button>
-        </mat-menu>
-    </div>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+  </div>
 </header>

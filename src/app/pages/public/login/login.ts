@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth-service';
@@ -12,15 +11,15 @@ import { AuthService } from '../../../core/services/auth/auth-service';
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
 
-
-  isLoading = false;
-  errorMessage = '';
+  isLoading = signal(false);
+  errorMessage = signal('');
 
   loginForm = this.fb.nonNullable.group({
     login: ['', [Validators.required]],
@@ -30,30 +29,29 @@ export class Login {
   submitLogin(): void {
     if (this.loginForm.invalid) return;
 
-    this.isLoading = true;
-    this.errorMessage = '';
+      console.log('Botão clicado no componente');
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
 
     const credentials = this.loginForm.getRawValue();
 
     this.authService.login(credentials).subscribe({
-      next: (res) => {
-        localStorage.setItem('access_token', res.access_token);
+      next: () => {
+        console.log('Sucesso no componente'),
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        this.isLoading = false;
+        console.error('Erro 419 capturado no componente:', err)
+        this.isLoading.set(false);
 
-        // Verificamos se o erro é o 403 (E-mail não verificado)
         if (err.status === 403 && err.error.requires_verification) {
-          // Salvamos o e-mail no storage para a tela de verificação saber para quem enviar o código
           localStorage.setItem('pending_email', err.error.email);
-
-          // Redireciona para a rota de verificação que criamos antes
-          this.router.navigate(['/verify']);
-        } else {
-          // Erro comum de senha ou usuário não encontrado
-          this.errorMessage = err.error.message || 'Falha ao entrar.';
+          this.router.navigate(['/verify-email']);
+          return;
         }
+
+        this.errorMessage.set(err.error?.message || 'Erro ao fazer login. Tente novamente.');
       }
     });
   }

@@ -4,13 +4,14 @@ import { Routes } from '@angular/router';
 import { Public } from './layouts/public/public-layout';
 import { Private } from './layouts/private/private-layout';
 import { authGuard } from './core/guards/auth/auth-guard';
-import { isLabeledStatement } from 'typescript';
+import { publicGuard } from './core/guards/public/public-guard';
 
 export const routes: Routes = [
   // ROTAS PÚBLICAS
   {
     path: '',
     component: Public,
+    canActivate: [publicGuard],
     children: [
       {
         path: '',
@@ -60,6 +61,14 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/private/dashboard/dashboard').then(m => m.Dashboard)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/private/profile/profile').then(m => m.Profile)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/private/settings/settings').then(m => m.Settings)
       },
       {
         path: 'financas',

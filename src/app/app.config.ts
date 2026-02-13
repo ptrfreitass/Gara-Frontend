@@ -1,31 +1,40 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, isDevMode, APP_INITIALIZER, inject, provideAppInitializer } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, provideZonelessChangeDetection, isDevMode } from '@angular/core';
+import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 
-import { app_config } from './core/config/app-config';
-import { provideServiceWorker } from '@angular/service-worker';
+// import { provideServiceWorker } from '@angular/service-worker';
 
-import { ThemeService } from './core/services/theme/theme';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth/auth-interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { errorInterceptor } from './core/interceptors/error/error-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
     
-    provideHttpClient(
-      withInterceptors([authInterceptor])
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withViewTransitions()
     ),
 
-    provideZoneChangeDetection({ eventCoalescing: true}),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor]),
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'X-XSRF-TOKEN',
+      })
+    ),
 
-    
+    provideZonelessChangeDetection(),
 
-    provideServiceWorker('ngsw-worker.js', {
+    provideAnimationsAsync(),
+
+    /*provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    })*/
   ]
 };

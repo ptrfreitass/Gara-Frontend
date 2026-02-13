@@ -1,104 +1,181 @@
+// =============================================================================
+// SIDEBAR ENTERPRISE SCSS
+// =============================================================================
+
+// Variáveis locais para fácil ajuste
+$sidebar-width-open: 250px;
+$sidebar-width-mini: 80px;
+$sidebar-width-mobile: 280px;
+$transition-speed: 400ms;
+$item-height: 48px;
+$border-radius: 8px;
+
+:host {
+  display: block;
+  // Garante que padding/border não aumentem a largura declarada
+  box-sizing: border-box; 
+}
+
 .sidebar {
   position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
-  background: linear-gradient(180deg, #546a8c 0%, #bac4d8 100%);
-  color: #ffffff;
+  width: $sidebar-width-open;
+  
+  background: linear-gradient(180deg, var(--side-one) 0%, var(--side-two) 100%);
+  color: var(--light-text);
+  
   z-index: 1000;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15); // Sombra mais suave e moderna
+  
+  // Transições suaves de geometria
+  transition: width $transition-speed cubic-bezier(0.2, 0, 0, 1),
+              transform $transition-speed cubic-bezier(0.2, 0, 0, 1);
+
+  // Comportamento de Scroll
   overflow-x: hidden;
   overflow-y: auto;
-  
-  // Transição nativa para largura e transformações
-  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), 
-              transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  width: 250px;
 
-  // Estado FECHADO (Desktop) - Estilo Mini Sidebar
+  // --- CONTEÚDO ---
+  &__content { padding: 1rem 0; }
+  &__nav { padding: 0; }
+
+
+  // =========================================================================
+  // ESTADO: FECHADO (MINI SIDEBAR - DESKTOP)
+  // =========================================================================
   &--closed:not(.sidebar--mobile) {
-    width: 80px;
+    width: $sidebar-width-mini;
+    overflow: visible; // Permite que o submenu saia da caixa
 
-    .menu-item span, .expand-icon, .submenu {
-      display: none; // Oculta textos e submenus no modo mini
+    // Esconde textos e setas
+    .menu-item span, 
+    .expand-icon,
+    .mat-list-item-content > .mat-icon:not([matListItemIcon]) { 
+      display: none; 
+      opacity: 0;
+    }
+
+    // CRÍTICO: Garante que os textos DENTRO do submenu flutuante apareçam
+  .submenu--floating {
+    span, 
+    div[matlistitemtitle], 
+    .text-truncate {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      white-space: nowrap;
     }
   }
 
-.sidebar--closed {
-  span, .expand-icon {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 100ms ease;
-  }
-}
+    // AJUSTE CRÍTICO: ITEM DO MENU NO MODO MINI
+    .menu-item {
+      width: calc(100% - 16px); // 80px - 16px = 64px de largura
+      margin: 4px 8px; // Centraliza horizontalmente (8px esquerda/direita)
+      justify-content: center;
+      padding: 0; // Remove padding interno extra
 
-  // Comportamento MOBILE
+      mat-icon {
+        margin-right: 0; // Remove margem do ícone para centralizar total
+      }
+
+      // Efeito de Hover Contido (Pílula)
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius; // Mantém arredondado sem vazar
+      }
+
+      // Indicador ativo vira uma "luz" no fundo ou cor de ícone
+      &--active {
+        background: rgba(255, 255, 255, 0.2);
+        
+        // Remove a barra lateral esquerda no modo mini pois fica feio centralizado
+        &::before { display: none; }
+      }
+    }
+  }
+
+  // Animação de saída dos textos
+  &--closed {
+    span, .expand-icon {
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+  }
+
+
+  // =========================================================================
+  // ESTADO: MOBILE
+  // =========================================================================
   &--mobile {
-    width: 280px;
-    transform: translateX(-100%); // Escondido por padrão
+    width: $sidebar-width-mobile;
+    transform: translateX(-100%); // Começa escondido
 
     &.sidebar--open {
-      transform: translateX(0); // Desliza para dentro
+      transform: translateX(0);
     }
   }
 
   // Scrollbar Customizada
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
     &:hover { background: rgba(255, 255, 255, 0.3); }
   }
-
-  &__content { padding: 1rem 0; }
-  &__nav { padding: 0; }
 }
 
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  // Animação nativa de Fade In
-  animation: fadeIn 300ms ease-in-out forwards;
-}
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+// =============================================================================
+// ITEM DO MENU (WRAPPER & ITEM)
+// =============================================================================
+
+.menu-item-wrapper {
+  position: relative; // Ponto de ancoragem para o submenu flutuante
+  display: block;
 }
 
 .menu-item {
-  cursor: pointer;
-  border-radius: 8px;
-  margin: 0.25rem 0.75rem;
-  transition: all 200ms ease-in-out;
-  color: rgba(255, 255, 255, 0.8);
-  height: 48px;
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
+  height: $item-height;
+  margin: 4px 12px; // Margem padrão do modo aberto
+  padding: 0 16px;
+  
+  cursor: pointer;
+  border-radius: $border-radius;
+  color: var(--menu-item-text);
   white-space: nowrap;
+  transition: all 200ms ease;
+  z-index: 1; // Fica acima do submenu "slide down"
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--light-text);
   }
 
   &--active {
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--info);
     font-weight: 500;
-    mat-icon { color: #60a5fa; }
+
+    // Indicador Lateral (Apenas modo aberto/mobile)
+    &::before {
+      content: '';
+      position: absolute;
+      left: -12px; // Sai um pouco do item para encostar na borda da tela
+      height: 24px;
+      width: 4px;
+      background: var(--info);
+      border-radius: 0 4px 4px 0;
+    }
   }
 
   mat-icon {
-    color: rgba(37, 35, 35, 0.7);
-    margin-right: 12px;
+    margin-right: 16px;
     min-width: 24px;
   }
 
@@ -109,47 +186,131 @@
   }
 }
 
-// SUBMENU COM TRANSIÇÃO NATIVA (Efeito Accordion)
+
+// =============================================================================
+// SUBMENU (ACCORDION & FLOATING)
+// =============================================================================
+
 .submenu {
+  // Padrão: Accordion (Modo Aberto)
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin: 0 0.75rem;
+  background: rgba(0, 0, 0, 0.2); // Fundo escuro sutil
+  border-radius: $border-radius;
+  margin: 0 12px 8px 12px; // Recuo para parecer aninhado
   
-  // A mágica da transição sem o motor de animação do Angular
   max-height: 0;
   opacity: 0;
-  transition: max-height 300ms ease-in-out, 
-              opacity 200ms ease-in-out,
-              margin 300ms ease;
+  transition: max-height 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms ease;
 
   &--expanded {
-    max-height: 500px; // Valor suficiente para o conteúdo
+    max-height: 1000px; // Altura segura para animação CSS
     opacity: 1;
-    margin-bottom: 0.5rem;
   }
 
-  mat-nav-list { padding: 0.5rem 0; }
+  mat-nav-list { padding: 4px 0; }
+
+  // --- MODO FLUTUANTE (Mini Sidebar) ---
+  &--floating {
+    // Reset do comportamento Accordion
+    position: absolute;
+    top: 0;
+    left: calc(100% + 10px); // Colado ao lado do wrapper + 10px de respiro
+    
+    width: 220px;
+    margin: 0;
+    max-height: none;
+    overflow: visible; // Permite sombras
+    
+    background: var(--side-two); // Cor sólida para não ver o fundo
+    box-shadow: 6px 6px 20px rgba(0,0,0,0.3); // Sombra forte para destaque
+    border-radius: 0 $border-radius $border-radius $border-radius;
+    z-index: 9999;
+    
+    // Controle de Visibilidade:
+    // Começa escondido (display none tira do fluxo)
+    display: none; 
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 200ms ease, transform 200ms ease;
+    
+    // Pequena seta indicando a origem (Opcional, mas chique)
+    &::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 18px; // Alinha com o meio do item pai (48px / 2 approx)
+      width: 12px;
+      height: 12px;
+      background: var(--side-two);
+      transform: rotate(45deg);
+      border-radius: 2px;
+    }
+  }
+
+  // Ativado apenas quando tem a classe expanded E floating
+  &--expanded.submenu--floating {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+    // visibility: visible; // Redundante com display block, mas seguro
+  }
 }
 
 .submenu-item {
-  cursor: pointer;
-  border-radius: 6px;
-  margin: 0.25rem 0.5rem;
-  padding-left: 1rem;
-  transition: all 200ms ease;
-  color: rgba(255, 255, 255, 0.7);
   height: 40px;
+  padding-left: 16px;
+  margin: 2px 4px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s;
+  
   display: flex;
   align-items: center;
 
-  &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
-  &--active { color: #93c5fd; font-weight: 500; }
+  &:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &--active {
+    color: var(--info);
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.05);
+  }
 
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
-    margin-right: 10px;
+    margin-right: 12px;
   }
+}
+
+
+// =============================================================================
+// OVERLAY (BACKDROP)
+// =============================================================================
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0; // Top, right, bottom, left = 0
+  z-index: 999;
+  
+  // Efeito de vidro fosco (apenas browsers modernos)
+  backdrop-filter: blur(2px); 
+  background: rgba(0, 0, 0, 0.3);
+
+  animation: fadeIn 300ms ease forwards;
+
+  // No desktop, queremos apenas capturar o clique, sem escurecer muito
+  @media (min-width: 768px) {
+    background: transparent;
+    backdrop-filter: none;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

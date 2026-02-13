@@ -119,13 +119,8 @@ export class VerifyEmail implements OnInit, OnDestroy {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res) => {
-          // 1. Salva o Token do Sanctum para login automático
-          localStorage.setItem('access_token', res.access_token);
-
-          // 2. Limpa dados temporários
           localStorage.removeItem('pending_email');
-
-          // 3. Redireciona para a Home já autenticado
+          this.authService.currentUserSignal.set(res.user);
           this.router.navigate(['/home']);
         },
         error: (err) => {

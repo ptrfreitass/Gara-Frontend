@@ -1,1 +1,62 @@
-<p>private home works!</p>
+<div class="command-center">
+  <header class="home-header">
+    <h1>Bom dia, {{ authService.userFirstName() }}</h1>
+    <p>Sua vida adulta está <strong>65% organizada</strong> esta semana.</p>
+  </header>
+
+  <div class="pillars-grid">
+    
+    <div class="pillar-card finance" routerLink="/financas">
+      <div class="pillar-content">
+        <mat-icon>payments</mat-icon>
+        <h3>Finanças</h3>
+        <span>3 contas vencem hoje</span>
+      </div>
+      <div class="pillar-footer">Ver fluxo de caixa →</div>
+    </div>
+
+    <div class="pillar-card planner" routerLink="/planejador">
+      <div class="pillar-content">
+        <mat-icon>event_available</mat-icon>
+        <h3>Planejador</h3>
+        <span>Próximo compromisso: Dentista (14h)</span>
+      </div>
+      <div class="pillar-footer">Abrir agenda →</div>
+    </div>
+
+    <div class="pillar-card inventory" routerLink="/estoque">
+      <div class="pillar-content">
+        <mat-icon>inventory_2</mat-icon>
+        <h3>Estoque Doméstico</h3>
+        <span class="warning">5 itens acabando (leite, sabão...)</span>
+      </div>
+      <div class="pillar-footer">Lista de compras →</div>
+    </div>
+
+    <div class="pillar-card docs" routerLink="/documentos">
+      <div class="pillar-content">
+        <mat-icon>folder_shared</mat-icon>
+        <h3>Documentos</h3>
+        <span>Renovação CNH em 30 dias</span>
+      </div>
+      <div class="pillar-footer">Acessar cofre →</div>
+    </div>
+
+  </div>
+
+  <div class="action-section">
+    <div class="upcoming-tasks shadow-sm">
+      <h3>Prioridades de Hoje</h3>
+      <mat-selection-list>
+        <mat-list-option checkboxPosition="before">Pagar IPTU (Parcela 04)</mat-list-option>
+        <mat-list-option checkboxPosition="before">Repor produtos de limpeza</mat-list-option>
+        <mat-list-option checkboxPosition="before">Agendar revisão do carro</mat-list-option>
+      </mat-selection-list>
+    </div>
+
+    <div class="quick-notes shadow-sm">
+      <h3>Notas Rápidas</h3>
+      <textarea placeholder="Escreva algo para não esquecer depois..."></textarea>
+    </div>
+  </div>
+</div>

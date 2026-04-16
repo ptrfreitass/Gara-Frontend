@@ -1,0 +1,120 @@
+/* src/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+/* ========================= */
+  /* PRIMARY — Verde Brasil   */
+  /* ========================= */
+
+  --color-primary-50:  #e6f7ef;
+  --color-primary-100: #c2ead9;
+  --color-primary-200: #9ddcc3;
+  --color-primary-300: #6acaa7;
+  --color-primary-400: #36b989;
+  --color-primary-500: #009440; /* base principal */
+  --color-primary-600: #008737;
+  --color-primary-700: #00722f;
+  --color-primary-800: #005d27;
+  --color-primary-900: #00451c;
+
+  /* ========================= */
+  /* SECONDARY — Azul Brasil  */
+  /* ========================= */
+
+  --color-secondary-50:  #e7e9f8;
+  --color-secondary-100: #c3c8ee;
+  --color-secondary-200: #9ea5e3;
+  --color-secondary-300: #7a83d8;
+  --color-secondary-400: #5763cc;
+  --color-secondary-500: #302681; /* base principal */
+  --color-secondary-600: #2a2273;
+  --color-secondary-700: #241d63;
+  --color-secondary-800: #1d1753;
+  --color-secondary-900: #140f3a;
+}
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: theme(colors.gray.50);
+    color: theme(colors.gray.900);
+  }
+
+  h1 { font-size: theme(fontSize.4xl); font-weight: theme(fontWeight.bold); }
+  h2 { font-size: theme(fontSize.3xl); font-weight: theme(fontWeight.bold); }
+  h3 { font-size: theme(fontSize.2xl); font-weight: theme(fontWeight.semibold); }
+
+  ::-webkit-scrollbar { width: 0.5rem; height: 0.5rem; }
+  ::-webkit-scrollbar-track { background-color: theme(colors.gray.100); }
+  ::-webkit-scrollbar-thumb { background-color: theme(colors.gray.300); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background-color: theme(colors.gray.400); }
+}
+
+@layer components {
+  .btn {
+    padding: theme(spacing.2) theme(spacing.4);
+    border-radius: theme(borderRadius.lg);
+    font-weight: theme(fontWeight.medium);
+    transition: all 200ms;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: linear-gradient(to right, var(--color-primary-600), var(--color-primary-700));
+    color: white;
+    box-shadow: theme(boxShadow.sm);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(to right, var(--color-primary-700), var(--color-primary-800));
+    box-shadow: theme(boxShadow.md);
+  }
+
+  .btn-secondary {
+    background-color: theme(colors.gray.200);
+    color: theme(colors.gray.900);
+  }
+  .btn-secondary:hover { background-color: theme(colors.gray.300); }
+
+  .card {
+    background-color: white;
+    border-radius: theme(borderRadius.xl);
+    box-shadow: theme(boxShadow.sm);
+    padding: theme(spacing.6);
+    border: 1px solid theme(colors.gray.100);
+    transition: box-shadow 200ms;
+  }
+  .card:hover { box-shadow: theme(boxShadow.md); }
+
+  .input {
+    width: 100%;
+    padding: theme(spacing.2) theme(spacing.4);
+    border: 1px solid theme(colors.gray.300);
+    border-radius: theme(borderRadius.lg);
+    transition: all 200ms;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(to bottom right, var(--color-primary-500), var(--color-secondary-500));
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, var(--color-primary-600), var(--color-secondary-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+}
